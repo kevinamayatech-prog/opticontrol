@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>OptiControl - Etiquetas - Ventas</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8 / html5">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <link rel="icon" type="image/png" href="images/favicon.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<style type="text/css">
+  
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+    html body {
+        margin: 0;
+        border: 0;
+      }
+
+    .caja{
+        border: 0;
+
+        width: 130mm;
+        height: 48mm;
+        position:absolute;
+    }
+
+    
+   .contenedor1{
+        width:22%;
+        height:50%;
+        position: static;
+        float:left;
+        text-align:center;
+   }
+  
+  .contenedor2{
+        width:77%;
+        height:50%;
+        position: static;
+        float: left;
+   }
+  
+  .contenedor3{
+        width:99%;
+        height:50%;
+        text-align:center;
+        position: static;
+        clear:both;
+   }
+  
+    .logo{
+        width: 90%;
+        position: static;
+    }
+
+    .cliente{
+        border:0;
+        width: 100%;
+        font-family: 'Montserrat';
+        font-size: 13pt;
+        font-weight: 700;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: inherit;
+        background-color: transparent;
+        margin-top: 25px;
+    }
+  
+  .venta{
+        border:0;
+        width: 100%;
+        font-family: 'Montserrat';
+        font-size: 11pt;
+        font-weight: 400;
+        text-align: left;
+        background: inherit;
+        background-color: transparent;
+        margin-top: 5px;
+    }
+  
+  .articulos{
+        height:90%;
+        border:0;
+        width: 90%;
+        font-family: 'Montserrat';
+        font-size: 11pt;
+        font-weight: 400;
+        text-align: center;
+        background: inherit;
+        background-color: transparent;
+        margin-top: 5px;
+    }
+</style>
+
+</head>
+<body>
+  <div class="caja">
+    <div class="contenedor1"><img class="logo" src="images/logo-negro.png" /></div>
+    <div class="contenedor2"><input class="cliente" name="cliente" type="text" value="[cliente]"/><br>
+      <input class="venta" name="venta" type="text" value="Compra N° [ncompra] | Fecha: [datosfecha]"/>
+    </div>
+    <div class="contenedor3"><input class="articulos" name="articulos" type="text" value="[montura] + [cristal]"/></div>
+  </div>
+
+ <script type="text/javascript">
+window.onload = function() {
+  // Obtener parámetros de la URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const cliente = urlParams.get("cliente");
+  const ncompra = urlParams.get("ncompra");
+  const datosfecha = urlParams.get("datosfecha");
+  const montura = urlParams.get("montura");
+  const cristal = urlParams.get("cristal");
+
+  // Rellenar los valores de entrada con parámetros
+  const clienteInput = document.querySelector(".cliente");
+  const ventaInput = document.querySelector(".venta");
+  const articulosInput = document.querySelector(".articulos");
+
+  clienteInput.value = cliente;
+  ventaInput.value = `Compra N° ${ncompra} | Fecha: ${datosfecha}`;
+  articulosInput.value = `${montura} + ${cristal}`;
+
+  // Imprimir el elemento "caja" en la misma ventana
+  const cajaElement = document.querySelector(".caja");
+  window.print({
+    mediaType: "print",
+    pageLayout: "landscape",
+    html: cajaElement.outerHTML,
+  });
+};
+  </script>
+</body>

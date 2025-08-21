@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>OptiControl - Codígo QR - Productos</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8 / html5">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <link rel="icon" type="image/png" href="images/favicon.png"/>
+<style type="text/css">
+
+    html body {
+        margin: 0 auto;
+        border: 0;
+      }
+
+    .caja{
+        border: 1px dashed black;
+        text-align: center;
+        position: relative;
+        width: 58mm;
+        height: 70mm;
+    }
+    
+   .contenedor{
+        border: 1px solid black;
+        position:absolute;
+        top:50%;
+        left:50%;
+        width: 35mm;
+        height: 70mm;
+        transform: translate(-50%, -50%);
+        text-align: center;
+   }
+  
+    .codigoqr{
+        width: 80%;
+        padding-top: 15mm;
+        padding-bottom: 2mm;
+        margin: 0 auto;
+    }
+  
+    .logo{
+        width: 55%;
+        margin: 0 auto;
+    }
+
+    .codigo{
+        border:0;
+        width: 80%;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12pt;
+        font-weight: bold;
+        text-align: center;
+    }
+
+
+</style>
+</head>
+<body>
+  <div class="caja">
+    <div class="contenedor">
+    <img class="codigoqr" src="https://qrcode.tec-it.com/API/QRCode?data=CODIGO&backcolor=%22ffffff%22" />
+    <input class="codigo" name="codigo" type="text" />
+      <img class="logo" src="images/logo-negro.png" />
+      </div>
+  </div>
+
+ <script type="text/javascript">
+// Extrae el parámetro "codigo" de la URL
+const codigo = window.location.search.substring(1).split("=")[1];
+
+
+// Actualiza el valor del input "codigo"
+document.querySelector(".codigo").value = codigo;
+
+
+// Actualiza el src de la imagen "codigoqr"
+const urlCodigoQR = "https://qrcode.tec-it.com/API/QRCode?data=" + codigo + "&backcolor=%22ffffff%22";
+document.querySelector(".codigoqr").src = urlCodigoQR;
+
+
+// Imprime el elemento "caja" con un tamaño de papel de 58x80mm y orientación horizontal
+window.onload = function() {
+  var caja = document.querySelector(".caja");
+  window.print(caja, {
+    width: 58,
+    height: 70,
+    landscape: false,
+  });
+};
+
+
+  </script>
+</body>
