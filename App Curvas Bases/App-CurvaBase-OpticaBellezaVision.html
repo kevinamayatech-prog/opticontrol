@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Curva Base para Lentes Oftálmicos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 4px;
+            display: none;
+        }
+        .note {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Curva Base para Lentes Oftálmicos</h1>
+    
+    <div class="form-container">
+        <div class="form-group">
+            <label for="esfera">Esfera (D):</label>
+            <input type="number" step="0.25" id="esfera" placeholder="Ej: -2.50">
+        </div>
+        
+        <div class="form-group">
+            <label for="cilindro">Cilindro (D):</label>
+            <input type="number" step="0.25" id="cilindro" placeholder="Ej: -1.00">
+        </div>
+        
+        <div class="form-group">
+            <label for="eje">Eje (grados):</label>
+            <input type="number" min="0" max="180" id="eje" placeholder="Ej: 90">
+        </div>
+        
+        <div class="form-group">
+            <label for="adicion">Adición (D):</label>
+            <input type="number" step="0.25" id="adicion" placeholder="Ej: +1.50 (0 si no aplica)">
+        </div>
+        
+        <div class="form-group">
+            <label for="material">Material del lente:</label>
+            <select id="material">
+                <option value="1.498">CR-39 (Plástico estándar)</option>
+                <option value="1.56">Policarbonato</option>
+                <option value="1.60">Alto índice 1.60</option>
+                <option value="1.67">Alto índice 1.67</option>
+                <option value="1.74">Alto índice 1.74</option>
+            </select>
+        </div>
+        
+        <button onclick="calcularCurvaBase()">Calcular Curva Base</button>
+        
+        <div id="resultado" class="result">
+            <h3>Resultado:</h3>
+            <p><strong>Curva Base recomendada:</strong> <span id="curva-base"></span></p>
+            <p><strong>Potencia Esférica Equivalente (PEE):</strong> <span id="pee"></span> D</p>
+            <p><strong>Consideraciones:</strong> <span id="consideraciones"></span></p>
+        </div>
+        
+        <div class="note">
+            <p><strong>Nota:</strong> Esta calculadora proporciona una estimación inicial. La curva base final debe ser determinada por un profesional óptico considerando factores adicionales como el diseño del lente, la distancia vertex y las necesidades específicas del paciente.</p>
+        </div>
+    </div>
+
+    <script>
+        function calcularCurvaBase() {
+            // Obtener valores del formulario
+            const esfera = parseFloat(document.getElementById('esfera').value) || 0;
+            const cilindro = parseFloat(document.getElementById('cilindro').value) || 0;
+            const eje = parseInt(document.getElementById('eje').value) || 0;
+            const adicion = parseFloat(document.getElementById('adicion').value) || 0;
+            const indiceRefraccion = parseFloat(document.getElementById('material').value);
+            
+            // Calcular Potencia Esférica Equivalente (PEE)
+            const pee = esfera + (cilindro / 2);
+            
+            // Calcular curva base inicial
+            let curvaBase = 6.0 + (pee / 2);
+            
+            // Ajustar por adición (para multifocales)
+            if (adicion > 0) {
+                curvaBase += adicion * 0.3; // Factor de ajuste para adición
+            }
+            
+            // Ajustar por índice de refracción
+            const factorIndice = 1.498 / indiceRefraccion; // CR-39 como referencia
+            curvaBase *= factorIndice;
+            
+            // Redondear al valor estándar más cercano (generalmente en incrementos de 0.50 o 0.75)
+            curvaBase = Math.round(curvaBase * 4) / 4; // Redondeo a 0.25 más cercano
+            
+            // Limitar a rangos típicos (generalmente entre 2.00 y 9.00)
+            curvaBase = Math.max(2.0, Math.min(9.0, curvaBase));
+            
+            // Mostrar resultados
+            document.getElementById('pee').textContent = pee.toFixed(2);
+            document.getElementById('curva-base').textContent = curvaBase.toFixed(2);
+            
+            // Añadir consideraciones
+            let consideraciones = "";
+            
+            if (Math.abs(pee) > 6.0) {
+                consideraciones += "Paciente con alta graduación, considere lentes más delgados y materiales de alto índice. ";
+            }
+            
+            if (cilindro > 2.0) {
+                consideraciones += "Cilindro elevado, verificar centrado óptico. ";
+            }
+            
+            if (adicion > 2.0) {
+                consideraciones += "Adición elevada, considere diseños específicos para multifocales. ";
+            }
+            
+            if (consideraciones === "") {
+                consideraciones = "Curva base estándar recomendada para esta graduación.";
+            }
+            
+            document.getElementById('consideraciones').textContent = consideraciones;
+            document.getElementById('resultado').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
